@@ -101,7 +101,53 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setClock('.timer', deadline);
-    function asd() {}
-});
+    
 
-//asd
+    //Modal
+
+    const modal = document.querySelector('.modal'),
+          modalTriggerOpen = document.querySelectorAll('[data-modal]'),
+          modalTriggerClose = document.querySelector('[data-close]'); 
+
+    function showModal() {
+            // modal.classList.add('show');
+            // modal.classList.remove('hide');
+            modal.classList.toggle('show');
+            document.body.style.overflow = 'hidden';
+            clearInterval(modalTimerId);
+    }
+    function closeModal() {
+        // modal.classList.add('hide');
+        // modal.classList.remove('show');
+        modal.classList.toggle('show');
+        document.body.style.overflow = '';
+    }
+
+    modalTriggerOpen.forEach(btn => {
+        btn.addEventListener('click', showModal)
+    })
+    modalTriggerClose.addEventListener('click', closeModal);  
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
+    });
+
+    const modalTimerId = setTimeout(showModal, 5000);
+
+    function showModalByScroll() {
+        if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1) {
+            showModal();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    }
+
+    window.addEventListener('scroll', showModalByScroll);
+
+});
